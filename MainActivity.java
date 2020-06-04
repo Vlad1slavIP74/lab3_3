@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         EditText MinText = findViewById(R.id.minText);
         EditText MaxText = findViewById(R.id.maxText);
 
+        TextView textView = findViewById(R.id.textView);
         TextView resultText = findViewById(R.id.resultText);
         TextView bestPercent = findViewById(R.id.bestPercent);
 
@@ -64,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         long iterationMin = Integer.MAX_VALUE;
         float bestPercentValue = 0.0F;
 
+        double start = System.nanoTime();
+
         for (float mutationPercent = 1.0F; mutationPercent < 100.0f; mutationPercent += 0.5F) {
             Algorithm diofant = new Algorithm(FINAL_VALUE, POPULATION_SIZE, GENE_MIN, GENE_MAX, a, b, c, d);
             diofant.initiatePopulation(FINAL_VALUE, GENE_MIN, GENE_MAX, a, b, c, d, mutationPercent);
@@ -88,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
                 diofant.setPopulation(nextGeneration);
 
                 iterationsNumber++;
+                if((System.nanoTime() - start)/1000000000 > 1) {
+                    textView.setText("Перевищено час виконання");
+                    break;
+                }
             } while (iterationsNumber < 10000);
 
             if (iterationsNumber < iterationMin) {
